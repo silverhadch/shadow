@@ -1,0 +1,22 @@
+<!--
+   SPDX-FileCopyrightText: 2025, Hadi Chokr
+   SPDX-License-Identifier: BSD-3-Clause
+-->
+<varlistentry>
+  <term><option>BTRFS_SUBVOLUME_HOME</option> (boolean)</term>
+  <listitem>
+    <para>
+      Indicate whether home directories for new users should be created
+      as Btrfs subvolumes instead of regular directories.
+    </para>
+    <para>
+      If set to <replaceable>yes</replaceable>, and the underlying
+      filesystem supports Btrfs subvolumes, the user's home directory
+      will be created as a separate Btrfs subvolume.
+    </para>
+    <para>
+      When the <option>--btrfs-subvolume-home</option> command-line option
+      is specified, a Btrfs subvolume is created regardless of this setting.
+    </para>
+  </listitem>
+</varlistentry>

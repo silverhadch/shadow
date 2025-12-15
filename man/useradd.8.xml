@@ -25,6 +25,7 @@
 <!ENTITY TCB_SYMLINKS          SYSTEM "login.defs.d/TCB_SYMLINKS.xml">
 <!ENTITY USE_TCB               SYSTEM "login.defs.d/USE_TCB.xml">
 <!ENTITY USERGROUPS_ENAB       SYSTEM "login.defs.d/USERGROUPS_ENAB.xml">
+<!ENTITY BTRFS_SUBVOLUME_HOME  SYSTEM "login.defs.d/BTRFS_SUBVOLUME_HOME.xml">
 <!-- SHADOW-CONFIG-HERE -->
 ]>
 <refentry id='useradd.8'>
@@ -131,6 +132,22 @@
 	    <option>HOME</option> variable in
 	    <filename>/etc/default/useradd</filename>, or
 	    <filename>/home</filename> by default.
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>--btrfs-subvolume-home</option>
+	</term>
+	<listitem>
+	  <para>
+	    Create the user's home directory as a Btrfs subvolume.
+	  </para>
+	  <para>
+	    If this option is not specified, <command>useradd</command>
+	    will follow the default behavior defined by the
+	    <option>BTRFS_SUBVOLUME_HOME</option> variable in
+	    <filename>/etc/default/useradd</filename>.
 	  </para>
 	</listitem>
       </varlistentry>
@@ -753,6 +770,7 @@
     </para>
     <variablelist>
       &CREATE_HOME;
+      &BTRFS_SUBVOLUME_HOME;
       &GID_MAX; <!-- documents also GID_MIN -->
       &HOME_MODE;
       &LASTLOG_UID_MAX;
