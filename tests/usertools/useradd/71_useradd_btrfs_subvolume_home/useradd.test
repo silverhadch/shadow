@@ -1,0 +1,89 @@
+#!/bin/sh
+
+set -e
+
+cd "$(dirname "$0")"
+
+. ../../../common/config.sh
+. ../../../common/log.sh
+
+log_start "$0" "useradd creates Btrfs subvolume home directories"
+
+# must run as root
+[ "$(id -u)" -eq 0 ] || exit 77
+
+# must have btrfs tools
+command -v mkfs.btrfs >/dev/null 2>&1 || exit 77
+command -v btrfs >/dev/null 2>&1 || exit 77
+
+save_config
+
+IMG=tmp/btrfs.img
+MNT=tmp/btrfs-mnt
+
+cleanup() {
+    umount /btrfs-home 2>/dev/null || true
+    umount "$MNT" 2>/dev/null || true
+    rm -rf tmp
+    restore_config
+}
+
+trap 'log_status "$0" FAILURE; cleanup' 0
+
+mkdir -p tmp
+
+# create a small btrfs filesystem
+truncate -s 256M "$IMG"
+mkfs.btrfs -q "$IMG"
+
+mkdir -p "$MNT"
+mount -o loop "$IMG" "$MNT"
+
+# bind mount to a fixed path for useradd
+mkdir -p "$MNT/btrfs-home"
+mkdir -p /btrfs-home
+mount --bind "$MNT/btrfs-home" /btrfs-home
+
+change_config
+
+###############################################################################
+# Test 1: BTRFS_SUBVOLUME_HOME=yes creates subvolume
+###############################################################################
+
+echo -n "Creating user with BTRFS_SUBVOLUME_HOME=yes..."
+
+useradd -m testuser
+
+echo "OK"
+
+echo -n "Checking that home directory is a Btrfs subvolume..."
+btrfs subvolume list "$MNT" | grep -q "testuser"
+echo "OK"
+
+[ -d /btrfs-home/testuser ]
+
+###############################################################################
+# Test 2: default behavior does NOT create subvolume
+###############################################################################
+
+echo -n "Disabling BTRFS_SUBVOLUME_HOME..."
+
+sed -i '/BTRFS_SUBVOLUME_HOME/d' /etc/default/useradd
+
+echo "OK"
+
+echo -n "Creating user with default behavior..."
+
+useradd -m testuser2
+
+echo "OK"
+
+echo -n "Checking that home directory is NOT a subvolume..."
+! btrfs subvolume list "$MNT" | grep -q "testuser2"
+echo "OK"
+
+[ -d /btrfs-home/testuser2 ]
+
+cleanup
+trap '' 0
+log_status "$0" SUCCESS

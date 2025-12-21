@@ -1,0 +1,2 @@
+# no testsuite password
+# root password: rootF00barbaz

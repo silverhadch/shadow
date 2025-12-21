@@ -1,0 +1,10 @@
+# Default values for useradd(8)
+
+GROUP=100
+HOME=/btrfs-home
+SHELL=/bin/sh
+INACTIVE=-1
+EXPIRE=
+SKEL=/etc/skel
+
+BTRFS_SUBVOLUME_HOME=yes
