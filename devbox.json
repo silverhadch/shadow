@@ -1,0 +1,32 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.16.0/.schema/devbox.schema.json",
+  "packages": [
+    "autoreconfHook@latest",
+    "bison@latest",
+    "flex@latest",
+    "docbook_xml_dtd_45@latest",
+    "docbook_xsl@latest",
+    "itstool@latest",
+    "libxml2@latest",
+    "libxslt@latest",
+    "libxcrypt@latest",
+    "pkg-config@latest",
+    "glibc@latest",
+    "pam@latest",
+    "libbsd@latest",
+    "tcb@latest",
+    "cmocka@latest",
+    "gcc@latest",
+    "libbsd.dev"
+  ],
+  "shell": {
+    "init_hook": [
+      "echo 'Welcome to devbox!' > /dev/null"
+    ],
+    "scripts": {
+      "test": [
+        "echo \"Error: no test specified\" && exit 1"
+      ]
+    }
+  }
+}
